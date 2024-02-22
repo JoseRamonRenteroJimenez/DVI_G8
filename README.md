@@ -47,24 +47,3 @@ En la carpeta `.vscode/` hay una configuración para usar Visual Studio Code, ta
 ## TypeScript
 
 TypeScript está automáticamente habilitado (gracias a Parcel). Para usarlo, simplemente hay que crear archivos con extensión `.ts`.
-
-## GCD
-
-OVERVIEW
-
-Título -> Escape en Alta Mar
-
-Sinopsis -> El juego de trata de escapar de un barco que se está hundiendo. Basado en los juegos de escape room deberás resolver puzles a contrarreloj.
-
-Genro - Puzle
-
-Rango de edad -> 7 - 99
-
-PEGI -> 7
-
-Target audience -> Jugadores habituales de puzles (profesor layton, portal) y jóvenes adultos
-
-Details
-Mechanics
-
-Story

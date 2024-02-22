@@ -1,28 +1,48 @@
-import Boot from './boot.js';
-import End from './end.js';
-import Level from './level.js';
-import Phaser from 'phaser'
+// import Boot from './boot.js';
+// import End from './end.js';
+// import Level from './level.js';
+// import Phaser from 'phaser'
 
-/**
- * Inicio del juego en Phaser. Creamos el archivo de configuración del juego y creamos
- * la clase Game de Phaser, encargada de crear e iniciar el juego.
- */
-let config = {
-    type: Phaser.AUTO,
-    width: 1000,
-    height: 500,
-    scale: {
-        // mode: Phaser.Scale.FIT,  
-        autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
-    },
-    pixelArt: true,
-    scene: [Boot, Level, End],
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 400 },
-            debug: false
-        }
-    }
-};
-new Phaser.Game(config);
+import { Project, Scene3D, PhysicsLoader, THREE } from 'enable3d'
+
+class MainScene extends Scene3D {
+  async create() {
+    this.warpSpeed('-sky', '-light', '-grid')
+
+    this.add.box({ y: 2, z: 2 }, { phong: {} })
+    this.add.box({ y: 3 }, { phong: {} })
+
+    // Find here all lights you can add:
+    // https://github.com/enable3d/enable3d/blob/master/packages/threeGraphics/src/plugins/lights.ts
+
+    this.spot = this.lights.spotLight({ color: 'blue', angle: Math.PI / 8 })
+    this.spotHelper = this.lights.helper.spotLightHelper(this.spot)
+
+    this.point = this.lights.pointLight({ color: 0x00ff7f, intensity: 2, distance: 10 })
+    this.point.position.set(0, 5, 0)
+    this.lights.helper.pointLightHelper(this.point)
+
+    this.directional = this.lights.directionalLight({ intensity: 0.5 })
+    this.directional.position.set(5, 5, 5)
+    this.lights.helper.directionalLightHelper(this.directional)
+
+    this.lights.hemisphereLight({ intensity: 0.2 })
+
+    const d = 4
+    this.directional.shadow.camera.top = d
+    this.directional.shadow.camera.bottom = -d
+    this.directional.shadow.camera.left = -d
+    this.directional.shadow.camera.right = d
+  }
+
+  update(time, delta) {
+    this.spot.position.set(Math.sin(time) * 2 - 8, 8, 2)
+    this.spot.target.position.set(2, 0, Math.sin(time) * 5)
+    this.spot.target.updateMatrixWorld()
+    this.spotHelper.update()
+
+    this.point.position.set(Math.cos(time * 2), Math.sin(time * 3) * 3 + 3.1, Math.cos(time * 1.5))
+  }
+}
+
+new Project({ scenes: [MainScene] })
