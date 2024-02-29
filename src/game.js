@@ -3,8 +3,6 @@ import Phaser from 'phaser'
 import { enable3d, Canvas, Scene3D, ExtendedObject3D, FirstPersonControls, THREE } from '@enable3d/phaser-extension'
 import './ammo/ammo'
 import './ammo/ammo.wasm'
-/**@type Phaser.Game*/
-let phaser;
 
 //3D models
 import m4 from "url:../assets/glb/M4A1.glb"
@@ -85,7 +83,7 @@ class MainScene extends Scene3D {
               }
             })
         })
-        
+
         // add red dot
         this.redDot = this.add.circle(this.cameras.main.width / 2, this.cameras.main.height / 2, 4, 0xff0000)
         this.redDot.depth = 1
@@ -95,7 +93,7 @@ class MainScene extends Scene3D {
         this.player.position.setY(1)
 
         // add first person controls
-        this.firstPersonControls = new FirstPersonControls(this.camera, this.player, {})
+        this.firstPersonControls = new FirstPersonControls(this.third.camera, this.player, {})
 
         // lock the pointer and update the first person control
         //al hacer click bloquear cursor en el canvas        
@@ -175,14 +173,14 @@ class MainScene extends Scene3D {
             // adjust the position of the rifle to the camera
             const raycaster = new THREE.Raycaster()
             // x and y are normalized device coordinates from -1 to +1
-            raycaster.setFromCamera({ x: 0.6 - this.move.x, y: -0.8 - this.move.y }, this.camera)
+            raycaster.setFromCamera({ x: 0.6 - this.move.x, y: -0.8 - this.move.y }, this.third.camera)
             const pos = new THREE.Vector3()
             pos.copy(raycaster.ray.direction)
             pos.multiplyScalar(0.8 + this.move.z)
             pos.add(raycaster.ray.origin)
 
             this.rifle.position.copy(pos)
-            this.rifle.rotation.copy(this.camera.rotation)
+            this.rifle.rotation.copy(this.third.camera.rotation)
 
             // move forwards and backwards
             if (this.keys.w.isDown) {
@@ -209,12 +207,12 @@ class MainScene extends Scene3D {
                 const force = 5
                 const pos = new THREE.Vector3()
 
-                raycaster.setFromCamera({ x, y }, this.camera)
+                raycaster.setFromCamera({ x, y }, this.third.camera)
 
                 pos.copy(raycaster.ray.direction)
                 pos.add(raycaster.ray.origin)
 
-                const sphere = this.physics.add.sphere(
+                const sphere = this.third.physics.add.sphere(
                     { radius: 0.05, x: pos.x, y: pos.y, z: pos.z, mass: 5, bufferGeometry: true },
                     { phong: { color: 0x202020 } }
                 )
