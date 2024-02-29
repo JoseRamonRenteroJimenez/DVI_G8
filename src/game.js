@@ -1,7 +1,15 @@
 import Phaser from 'phaser'
-import { Project, Scene3D, PhysicsLoader, ThirdDimension, ExtendedObject3D, FirstPersonControls, THREE } from 'enable3d'
+//import { Project, PhysicsLoader , ThirdDimension, ExtendedObject3D, FirstPersonControls, THREE } from 'enable3d'
+import { enable3d, Canvas, Scene3D, ExtendedObject3D, FirstPersonControls, THREE } from '@enable3d/phaser-extension'
 import './ammo/ammo'
 import './ammo/ammo.wasm'
+/**@type Phaser.Game*/
+let phaser;
+
+//3D models
+import m4 from "url:../assets/glb/M4A1.glb"
+import caja from "url:../assets/glb/caja.glb"
+//fetch(m4); fetch(caja);
 class MainScene extends Scene3D {
     constructor() {
         super({ key: 'MainScene' })
@@ -10,37 +18,37 @@ class MainScene extends Scene3D {
     }
 
     postRender() {
-        this.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
-        this.renderer.render(this.scene, this.camera)
+        this.third.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
+        this.third.renderer.render(this.third.scene, this.third.camera)
 
-        this.renderer.clearDepth()
+        this.third.renderer.clearDepth()
 
-        this.renderer.setScissorTest(true)
-        this.renderer.setScissor(50, 50, 150, 100)
-        this.renderer.setViewport(50, 50, 150, 100)
+        this.third.renderer.setScissorTest(true)
+        this.third.renderer.setScissor(50, 50, 150, 100)
+        this.third.renderer.setViewport(50, 50, 150, 100)
 
-        //this.renderer.render(this.scene, this.secondCamera)
+        this.third.renderer.render(this.third.scene, this.secondCamera)
 
-        this.renderer.setScissorTest(false)
+        this.third.renderer.setScissorTest(false)
     }
 
     create() {
-        //this.accessThirdDimension({ maxSubSteps: 10, fixedTimeStep: 1 / 180 })
+        this.accessThirdDimension({ maxSubSteps: 10, fixedTimeStep: 1 / 180 })
 
-        this.warpSpeed('-orbitControls')
-        //this.haveSomeFun(50)
-        this.renderer.gammaFactor = 1.5
-        this.camera.layers.enable(1) // enable layer 1
+        this.third.warpSpeed('-orbitControls')
+        this.third.haveSomeFun(50)
+        this.third.renderer.gammaFactor = 1.5
+        this.third.camera.layers.enable(1) // enable layer 1
 
         // second camera
         this.secondCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
-        this.add.existing(this.secondCamera)
-        this.camera.add(this.secondCamera)
+        this.third.add.existing(this.secondCamera)
+        this.third.camera.add(this.secondCamera)
         // this.secondCamera.layers.set(1)
 
-        //this.scene.game.events.on('postrender', (renderer, time, delta) => {
-        //    this.postRender()
-        //})
+        this.scene.scene.game.events.on('postrender', (renderer, time, delta) => {
+          this.postRender()
+        })
 
         /**
          * hashtag3d (https://www.cgtrader.com/hashtag3d)
@@ -48,38 +56,38 @@ class MainScene extends Scene3D {
          * Editorial License (https://www.cgtrader.com/pages/terms-and-conditions#general-terms-of-licensing)
          */
         
-        this.load.gltf('/assets/glb/caja.glb').then(o => {
+        this.third.load.gltf(caja).then(o => {
             const caja = new ExtendedObject3D();
             caja.add(o.scene);
             caja.name = "Caja";
             caja.scale.x = caja.scale.y = caja.scale.z = 4;
-            this.add.existing(caja);
+            this.third.add.existing(caja);
             console.log(caja)
 
-            const body = this.add.box({ width: caja.scale.z, height: caja.scale.y, depth: caja.scale.z }, { lambert: { color: 'red', transparent: true, opacity: 0.5 } })
-            this.physics.add.existing(body, { mass: 1e-8, shape: 'box', width: 0.2, height: 0.2, depth: 0.2, collisionFlags: 1 })
+            const body = this.third.add.box({ width: caja.scale.z, height: caja.scale.y, depth: caja.scale.z }, { lambert: { color: 'red', transparent: true, opacity: 0.5 } })
+            this.third.physics.add.existing(body, { mass: 1e-8, shape: 'box', width: 0.2, height: 0.2, depth: 0.2, collisionFlags: 1 })
             console.log(body)
         });
-        this.load.gltf('/assets/glb/M4A1.glb').then(object => {
+        this.third.load.gltf(m4).then(object => {
             const rifle = object.scene
 
             this.rifle = new ExtendedObject3D()
             this.rifle.name = 'rifle'
             this.rifle.add(rifle)
 
-            this.add.existing(this.rifle)
+            this.third.add.existing(this.rifle)
 
             this.rifle.traverse(child => {
-                if (child.isMesh) {
-                    child.layers.set(1) // mesh is in layer 1
-                    child.castShadow = child.receiveShadow = true
-                    if (child.material) child.material.metalness = 0
-                }
+              if (child.isMesh) {
+                child.layers.set(1) // mesh is in layer 1
+                child.castShadow = child.receiveShadow = true
+                if (child.material) child.material.metalness = 0
+              }
             })
         })
         
         // add red dot
-        this.redDot = this.add.circle(this.camera.getFilmWidth() / 2, this.camera.getFilmHeight() / 2, 4, 0xff0000)
+        this.redDot = this.add.circle(this.cameras.main.width / 2, this.cameras.main.height / 2, 4, 0xff0000)
         this.redDot.depth = 1
 
         // add player
@@ -90,6 +98,7 @@ class MainScene extends Scene3D {
         this.firstPersonControls = new FirstPersonControls(this.camera, this.player, {})
 
         // lock the pointer and update the first person control
+        //al hacer click bloquear cursor en el canvas        
         this.input.on('pointerdown', () => {
             this.input.mouse.requestPointerLock()
         })
@@ -101,6 +110,7 @@ class MainScene extends Scene3D {
         this.events.on('update', () => {
             this.firstPersonControls.update(0, 0)
         })
+
 
         // add keys
         this.keys = {
@@ -116,10 +126,11 @@ class MainScene extends Scene3D {
     update(time, delta) {
         if (this.rifle && this.rifle) {
             // some variables
-            const zoom = this.input.mousePointer.rightButtonDown()
+            //const zoom = this.input.mousePointer.rightButtonDown()
+            const zoom = undefined;
             const speed = 0.1
             const direction = new THREE.Vector3()
-            const rotation = this.camera.getWorldDirection(direction)
+            const rotation = this.third.camera.getWorldDirection(direction)
             const theta = Math.atan2(rotation.x, rotation.z)
 
             // reset red dot
@@ -143,21 +154,21 @@ class MainScene extends Scene3D {
 
             // tilt
             if (this.keys.q.isDown) {
-                this.camera.rotateZ(0.2)
+                this.third.camera.rotateZ(0.2)
                 this.firstPersonControls.offset = new THREE.Vector3(
                     Math.sin(theta + Math.PI * 0.5) * 0.4,
                     0,
                     Math.cos(theta + Math.PI * 0.5) * 0.4
                 )
             } else if (this.keys.e.isDown) {
-                this.camera.rotateZ(-0.2)
+                this.third.camera.rotateZ(-0.2)
                 this.firstPersonControls.offset = new THREE.Vector3(
                     Math.sin(theta - Math.PI * 0.5) * 0.4,
                     0,
                     Math.cos(theta - Math.PI * 0.5) * 0.4
                 )
             } else {
-                this.camera.rotateZ(0)
+                this.third.camera.rotateZ(0)
                 this.firstPersonControls.offset = new THREE.Vector3(0, 0, 0)
             }
 
@@ -226,11 +237,16 @@ const config = {
         width: window.innerWidth,
         height: window.innerHeight
     },
-    scenes: [MainScene],
-    antialias: true
-    //...Canvas({ antialias: true })
+    scene: [MainScene],
+    //antialias: true,
+    ...Canvas({ antialias: true })
 }
-PhysicsLoader('/__parcel_source_root/src/ammo', () => new Project(config))
+
+window.addEventListener('load', () => {
+    enable3d(() => new Phaser.Game(config)).withPhysics('/__parcel_source_root/src/ammo');
+});
+//PhysicsLoader('/__parcel_source_root/src/ammo', () => new Project(config))
+//PhysicsLoader('/__parcel_source_root/src/ammo', () => new Phaser.Game(config))
 /*window.addEventListener('load', () => {
     Project(() => new Phaser.Game(config)).withPhysics('/lib/ammo/kripken')
 })*/
