@@ -6,7 +6,7 @@ import './ammo/ammo.wasm'
 
 //3D models
 import m4 from "url:../assets/glb/M4A1.glb"
-import caja from "url:../assets/glb/caja.glb"
+import caja from "url:../assets/glb/Habitacion1.glb"
 //fetch(m4); fetch(caja);
 class MainScene extends Scene3D {
     constructor() {
@@ -58,7 +58,7 @@ class MainScene extends Scene3D {
             const caja = new ExtendedObject3D();
             caja.add(o.scene);
             caja.name = "Caja";
-            caja.scale.x = caja.scale.y = caja.scale.z = 4;
+            caja.scale.x = caja.scale.y = caja.scale.z = 0.2;
             this.third.add.existing(caja);
             console.log(caja)
 
