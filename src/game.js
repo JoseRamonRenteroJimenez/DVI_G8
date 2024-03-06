@@ -5,7 +5,7 @@ import './ammo/ammo'
 import './ammo/ammo.wasm'
 
 //3D models
-import m4 from "url:../assets/glb/M4A1.glb"
+import m4 from "url:../assets/glb/low-poly_rose.glb"
 import caja from "url:../assets/glb/Habitacion1.glb"
 //fetch(m4); fetch(caja);
 class MainScene extends Scene3D {
@@ -25,7 +25,7 @@ class MainScene extends Scene3D {
         this.third.renderer.setScissor(50, 50, 150, 100)
         this.third.renderer.setViewport(50, 50, 150, 100)
 
-        this.third.renderer.render(this.third.scene, this.secondCamera)
+        //this.third.renderer.render(this.third.scene, this.secondCamera)
 
         this.third.renderer.setScissorTest(false)
     }
@@ -34,14 +34,14 @@ class MainScene extends Scene3D {
         this.accessThirdDimension({ maxSubSteps: 10, fixedTimeStep: 1 / 180 })
 
         this.third.warpSpeed('-orbitControls')
-        this.third.haveSomeFun(50)
+        //this.third.haveSomeFun(50)
         this.third.renderer.gammaFactor = 1.5
         this.third.camera.layers.enable(1) // enable layer 1
 
         // second camera
-        this.secondCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
-        this.third.add.existing(this.secondCamera)
-        this.third.camera.add(this.secondCamera)
+        //this.secondCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
+        //this.third.add.existing(this.secondCamera)
+        //this.third.camera.add(this.secondCamera)
         // this.secondCamera.layers.set(1)
 
         this.scene.scene.game.events.on('postrender', (renderer, time, delta) => {
@@ -72,6 +72,7 @@ class MainScene extends Scene3D {
             this.rifle = new ExtendedObject3D()
             this.rifle.name = 'rifle'
             this.rifle.add(rifle)
+            this.rifle.scale.x = this.rifle.scale.y = this.rifle.scale.z = 0.001 ; 
 
             this.third.add.existing(this.rifle)
 
