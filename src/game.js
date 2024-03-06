@@ -7,6 +7,11 @@ import './ammo/ammo.wasm'
 //3D models
 import m4 from "url:../assets/glb/low-poly_rose.glb"
 import caja from "url:../assets/glb/Habitacion1.glb"
+import water1 from "url:../assets/water/Water_1_M_Normal.jpg"
+import water2 from "url:../assets/water/Water_2_M_Normal.jpg"
+
+let alturaAgua = 0;
+
 //fetch(m4); fetch(caja);
 class MainScene extends Scene3D {
     constructor() {
@@ -30,14 +35,14 @@ class MainScene extends Scene3D {
         this.third.renderer.setScissorTest(false)
     }
 
-    create() {
+    async create() {
         this.accessThirdDimension({ maxSubSteps: 10, fixedTimeStep: 1 / 180 })
 
-        this.third.warpSpeed('-orbitControls')
+        await this.third.warpSpeed('-orbitControls')
         //this.third.haveSomeFun(50)
         this.third.renderer.gammaFactor = 1.5
         this.third.camera.layers.enable(1) // enable layer 1
-
+        await this.createWater();
         // second camera
         //this.secondCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
         //this.third.add.existing(this.secondCamera)
@@ -123,6 +128,8 @@ class MainScene extends Scene3D {
     }
 
     update(time, delta) {
+        alturaAgua = alturaAgua+0.2;
+        //this.createWater();
         if (this.rifle && this.rifle) {
             // some variables
             //const zoom = this.input.mousePointer.rightButtonDown()
@@ -224,6 +231,22 @@ class MainScene extends Scene3D {
                 sphere.body.applyForce(pos.x * force, pos.y * force, pos.z * force)
             }
         }
+    }
+
+    async createWater(){
+        const textures = await Promise.all([
+            this.third.load.texture(water1),
+            this.third.load.texture(water2)
+          ])
+    
+          textures[0].needsUpdate = true
+          textures[1].needsUpdate = true
+    
+          this.third.misc.water({
+            y: alturaAgua,
+            normalMap0: textures[0],
+            normalMap1: textures[1]
+          })
     }
 }
 
