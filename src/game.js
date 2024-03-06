@@ -6,7 +6,7 @@ import './ammo/ammo.wasm'
 
 //3D models
 import m4 from "url:../assets/glb/M4A1.glb"
-import caja from "url:../assets/glb/caja.glb"
+import caja from "url:../assets/glb/pruebaEscenario.glb"
 //fetch(m4); fetch(caja);
 class MainScene extends Scene3D {
     constructor() {
