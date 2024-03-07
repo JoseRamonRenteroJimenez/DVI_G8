@@ -18,10 +18,18 @@
     },
     "homepage": "https://github.com/cleongh/plantillaphaser#readme",
     "devDependencies": {
+        "buffer": "^6.0.3",
         "parcel": "^2.10.3",
+        "path-browserify": "^1.0.1",
+
         "process": "^0.11.10"
     },
     "dependencies": {
-        "phaser": "^3.70.0"
+        "@enable3d/ammo-physics": "^0.25.4",
+        "@enable3d/phaser-extension": "^0.25.4",
+        "@enable3d/three-graphics": "^0.25.4",
+        "enable3d": "^0.25.4",
+        "phaser": "^3.70.0",
+        "three": "^0.156.1"
     }
 }
