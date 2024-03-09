@@ -28,7 +28,7 @@
         "@enable3d/phaser-extension": "^0.25.4",
         "@enable3d/three-graphics": "^0.25.4",
         "enable3d": "^0.25.4",
-        "phaser": "^3.70.0",
+        "phaser": "^3.80.1",
         "three": "^0.156.1"
     }
 }
