@@ -272,4 +272,3 @@ window.addEventListener('load', () => {
 /*window.addEventListener('load', () => {
     Project(() => new Phaser.Game(config)).withPhysics('/lib/ammo/kripken')
 })*/
-

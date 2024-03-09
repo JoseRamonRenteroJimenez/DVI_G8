@@ -21,7 +21,6 @@
         "buffer": "^6.0.3",
         "parcel": "^2.10.3",
         "path-browserify": "^1.0.1",
-
         "process": "^0.11.10"
     },
     "dependencies": {
