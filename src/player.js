@@ -52,5 +52,4 @@ export default class Player extends ExtendedObject3D
             this.body.setVelocityX(0);
         }
     }
-
 }

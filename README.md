@@ -68,5 +68,3 @@ Details
 Mechanics
 
 Story
-
-
