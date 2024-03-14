@@ -6,7 +6,7 @@ import './ammo/ammo.wasm'
 
 //3D models
 import m4 from "url:../assets/glb/low-poly_rose.glb"
-import caja from "url:../assets/glb/Habitacion1.glb"
+import caja from "url:../assets/glb/nivel1_1.glb"
 import water1 from "url:../assets/water/Water_1_M_Normal.jpg"
 import water2 from "url:../assets/water/Water_2_M_Normal.jpg"
 
