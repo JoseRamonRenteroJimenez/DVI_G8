@@ -6,10 +6,24 @@ import './ammo/ammo.wasm'
 
 //3D models
 import m4 from "url:../assets/glb/low-poly_rose.glb"
-import nivel1 from "url:../assets/glb/nivel1_2.glb"
+import nivel1 from "url:../assets/glb/nivel1_3.glb"
 import caja_bolas from "url:../assets/glb/caja_bolas.glb"
+
+//cajas
+import caja1 from "url:../assets/glb/caja1.glb"
+import caja2 from "url:../assets/glb/caja2.glb"
+import caja3 from "url:../assets/glb/caja3.glb"
+import caja4 from "url:../assets/glb/caja4.glb"
+import caja5 from "url:../assets/glb/caja5.glb"
+import caja6 from "url:../assets/glb/caja6.glb"
+import caja7 from "url:../assets/glb/caja7.glb"
+
+//cartas
+import carta1 from "url:../assets/glb/carta1.glb"
+
 import water1 from "url:../assets/water/Water_1_M_Normal.jpg"
 import water2 from "url:../assets/water/Water_2_M_Normal.jpg"
+import { CollisionEvents } from '@enable3d/ammo-physics/dist/collisionEvents'
 
 let alturaAgua = 0;
 
@@ -75,11 +89,92 @@ class MainScene extends Scene3D {
             const caja_bolas = new ExtendedObject3D();
             caja_bolas.add(cajaBolasMesh);
             caja_bolas.name = 'caja_bolas';
-            
             this.third.physics.add.existing(caja_bolas, { mass: 10 ,collisionFlags: 2});
             this.third.add.existing(caja_bolas);
         
             });
+
+            this.third.load.gltf(caja1).then(gltf => {
+                const caja1Mesh = gltf.scene;
+                const caja1 = new ExtendedObject3D();
+                caja1.add(caja1Mesh);
+                caja1.name = 'caja1';
+                this.third.physics.add.existing(caja1, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja1);
+            
+            });
+
+            this.third.load.gltf(caja2).then(gltf => {
+                const caja2Mesh = gltf.scene;
+                const caja2 = new ExtendedObject3D();
+                caja2.add(caja2Mesh);
+                caja2.name = 'caja2';
+                this.third.physics.add.existing(caja2, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja2);
+                
+            });
+
+            this.third.load.gltf(caja3).then(gltf => {
+                const caja3Mesh = gltf.scene;
+                const caja3 = new ExtendedObject3D();
+                caja3.add(caja3Mesh);
+                caja3.name = 'caja3';
+                this.third.physics.add.existing(caja3, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja3);
+                
+            });
+
+            this.third.load.gltf(caja4).then(gltf => {
+                const caja4Mesh = gltf.scene;
+                const caja4 = new ExtendedObject3D();
+                caja4.add(caja4Mesh);
+                caja4.name = 'caja4';
+                this.third.physics.add.existing(caja4, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja4);
+                
+            });
+
+            this.third.load.gltf(caja5).then(gltf => {
+                const caja5Mesh = gltf.scene;
+                const caja5 = new ExtendedObject3D();
+                caja5.add(caja5Mesh);
+                caja5.name = 'caja5';
+                this.third.physics.add.existing(caja5, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja5);
+                
+            });
+
+            this.third.load.gltf(caja6).then(gltf => {
+                const caja6Mesh = gltf.scene;
+                const caja6 = new ExtendedObject3D();
+                caja6.add(caja6Mesh);
+                caja6.name = 'caja6';
+                this.third.physics.add.existing(caja6, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja6);
+                
+            });
+
+            this.third.load.gltf(caja7).then(gltf => {
+                const caja7Mesh = gltf.scene;
+                const caja7 = new ExtendedObject3D();
+                caja7.add(caja7Mesh);
+                caja7.name = 'caja7';
+                this.third.physics.add.existing(caja7, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja7);
+                
+            });
+
+            this.third.load.gltf(carta1).then(gltf => {
+                const carta1Mesh = gltf.scene;
+                const carta1 = new ExtendedObject3D();
+                carta1.add(carta1Mesh);
+                carta1.name = 'carta1';
+                this.third.physics.add.existing(carta1, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(carta1);
+                
+            });
+
+    
 
         this.third.load.gltf(m4).then(object => {
             const rifle = object.scene
@@ -107,6 +202,10 @@ class MainScene extends Scene3D {
         // add player
         this.player = new ExtendedObject3D()
         this.player.position.setY(5)
+        this.player.position.setX(-1)
+        this.player.position.setZ(2)
+        
+
 
         // add first person controls
         this.firstPersonControls = new FirstPersonControls(this.third.camera, this.player, {})
@@ -135,10 +234,17 @@ class MainScene extends Scene3D {
             q: this.input.keyboard.addKey('q'),
             e: this.input.keyboard.addKey('e')
         }
+        this.third.physics.add.collider(this.nivel1, this.player, (nivel1, player) => {
+            // Aquí puedes colocar el código que deseas ejecutar cuando ocurra la colisión
+            // Este callback se llamará cada vez que se produzca una colisión entre nivel1 y player
+            console.log('Colisión entre nivel1 y player');
+        });
+        
+        //this.third.physics.add.collider(this.nivel1,this.player,eventCallback : (event: CollisionEvent));
     }
 
     update(time, delta) {
-        alturaAgua = alturaAgua+0.2;
+        alturaAgua = alturaAgua + 0.2;
         //this.createWater();
        // Verificar si `this.caja_bolas` está definido y es un objeto válido
         if (this.rifle && this.rifle) {
