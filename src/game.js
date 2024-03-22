@@ -4,13 +4,15 @@ import { enable3d, Canvas, Scene3D, ExtendedObject3D, THREE, FirstPersonControls
 import './ammo/ammo'
 import './ammo/ammo.wasm'
 
+//Niveles
+import nivel0 from "../src/niveles/nivel0"
+
 //3D models./modules/water
 import m4 from "url:../assets/glb/low-poly_rose.glb"
-import caja from "url:../assets/glb/nivel1_1.glb"
+import { Object3D } from 'three'
 
-let alturaAgua = 0;
 
-//fetch(m4); fetch(caja);
+
 class MainScene extends Scene3D {
     constructor() {
         super({ key: 'MainScene' })
@@ -20,31 +22,14 @@ class MainScene extends Scene3D {
 
     async create() {
 
-        //Controles de primera persona 
-        //setupFirstPersonControls(this);
-
-        //Controles de la cámara
-        //setupCameraControls(this);
-
         this.accessThirdDimension({ maxSubSteps: 10, fixedTimeStep: 1 / 180 })
 
         await this.third.warpSpeed('-orbitControls')
         
         //this.third.haveSomeFun(50)
         
-        //Cargar habitación
-        this.third.load.gltf(caja).then(o => {
-            const caja = new ExtendedObject3D();
-            caja.add(o.scene);
-            caja.name = "Caja";
-            caja.scale.x = caja.scale.y = caja.scale.z = 0.2;
-            this.third.add.existing(caja);
-            console.log(caja)
-
-            const body = this.third.add.box({ width: caja.scale.z, height: caja.scale.y, depth: caja.scale.z }, { lambert: { color: 'red', transparent: true, opacity: 0.5 } })
-            this.third.physics.add.existing(body, { mass: 1e-8, shape: 'box', width: 0.2, height: 0.2, depth: 0.2, collisionFlags: 1 })
-            console.log(body)
-        });
+        //Cargamos nivel0
+        const n0 = new nivel0(this)
 
         //Cargar flor
 
