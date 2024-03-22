@@ -6,7 +6,8 @@ import './ammo/ammo.wasm'
 
 //3D models
 import m4 from "url:../assets/glb/low-poly_rose.glb"
-import caja from "url:../assets/glb/nivel1_1.glb"
+import nivel1 from "url:../assets/glb/nivel1_2.glb"
+import caja_bolas from "url:../assets/glb/caja_bolas.glb"
 import water1 from "url:../assets/water/Water_1_M_Normal.jpg"
 import water2 from "url:../assets/water/Water_2_M_Normal.jpg"
 
@@ -14,6 +15,7 @@ let alturaAgua = 0;
 
 //fetch(m4); fetch(caja);
 class MainScene extends Scene3D {
+
     constructor() {
         super({ key: 'MainScene' })
         console.log("MainScene constructor")
@@ -42,7 +44,7 @@ class MainScene extends Scene3D {
         //this.third.haveSomeFun(50)
         this.third.renderer.gammaFactor = 1.5
         this.third.camera.layers.enable(1) // enable layer 1
-        await this.createWater();
+        //await this.createWater();
         // second camera
         //this.secondCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
         //this.third.add.existing(this.secondCamera)
@@ -52,25 +54,33 @@ class MainScene extends Scene3D {
         this.scene.scene.game.events.on('postrender', (renderer, time, delta) => {
           this.postRender()
         })
+        
 
         /**
          * hashtag3d (https://www.cgtrader.com/hashtag3d)
          * https://www.cgtrader.com/free-3d-models/military/armor/m4a1-carbine-e81d81d5-cfdb-4c57-be71-5c1b8092f4ea
          * Editorial License (https://www.cgtrader.com/pages/terms-and-conditions#general-terms-of-licensing)
          */
+         this.third.load.gltf(nivel1).then(gltf => {
+            const cajaMesh = gltf.scene;
+            const nivel1 = new ExtendedObject3D();
+            nivel1.add(cajaMesh);
+            nivel1.name = 'nivel1';
+            this.third.physics.add.existing(nivel1, { mass: 10, collisionFlags: 2 });
+            this.third.add.existing(nivel1);
+            });
+            
+         this.third.load.gltf(caja_bolas).then(gltf => {
+            const cajaBolasMesh = gltf.scene;
+            const caja_bolas = new ExtendedObject3D();
+            caja_bolas.add(cajaBolasMesh);
+            caja_bolas.name = 'caja_bolas';
+            
+            this.third.physics.add.existing(caja_bolas, { mass: 10 ,collisionFlags: 2});
+            this.third.add.existing(caja_bolas);
         
-        this.third.load.gltf(caja).then(o => {
-            const caja = new ExtendedObject3D();
-            caja.add(o.scene);
-            caja.name = "Caja";
-            caja.scale.x = caja.scale.y = caja.scale.z = 0.2;
-            this.third.add.existing(caja);
-            console.log(caja)
+            });
 
-            const body = this.third.add.box({ width: caja.scale.z, height: caja.scale.y, depth: caja.scale.z }, { lambert: { color: 'red', transparent: true, opacity: 0.5 } })
-            this.third.physics.add.existing(body, { mass: 1e-8, shape: 'box', width: 0.2, height: 0.2, depth: 0.2, collisionFlags: 1 })
-            console.log(body)
-        });
         this.third.load.gltf(m4).then(object => {
             const rifle = object.scene
 
@@ -96,7 +106,7 @@ class MainScene extends Scene3D {
 
         // add player
         this.player = new ExtendedObject3D()
-        this.player.position.setY(1)
+        this.player.position.setY(5)
 
         // add first person controls
         this.firstPersonControls = new FirstPersonControls(this.third.camera, this.player, {})
@@ -130,6 +140,7 @@ class MainScene extends Scene3D {
     update(time, delta) {
         alturaAgua = alturaAgua+0.2;
         //this.createWater();
+       // Verificar si `this.caja_bolas` está definido y es un objeto válido
         if (this.rifle && this.rifle) {
             // some variables
             //const zoom = this.input.mousePointer.rightButtonDown()
@@ -201,8 +212,8 @@ class MainScene extends Scene3D {
 
             // move sideways
             if (this.keys.a.isDown) {
-                this.player.position.x += Math.sin(theta + Math.PI * 0.5) * speed
-                this.player.position.z += Math.cos(theta + Math.PI * 0.5) * speed
+               this.player.position.x += Math.sin(theta + Math.PI * 0.5) * speed
+               this.player.position.z += Math.cos(theta + Math.PI * 0.5) * speed
             } else if (this.keys.d.isDown) {
                 this.player.position.x += Math.sin(theta - Math.PI * 0.5) * speed
                 this.player.position.z += Math.cos(theta - Math.PI * 0.5) * speed
@@ -231,6 +242,11 @@ class MainScene extends Scene3D {
                 sphere.body.applyForce(pos.x * force, pos.y * force, pos.z * force)
             }
         }
+        // Para mover hacia adelante
+        //this.caja_bolas.position.x += 0.1; // Ajusta la velocidad como desees
+
+        //this.caja_bolas.position.x = (Math.sin(time) + 1) * 5 + 12
+        //this.caja_bolas.body.needUpdate = true
     }
 
     async createWater(){
@@ -248,6 +264,30 @@ class MainScene extends Scene3D {
             normalMap1: textures[1]
           })
     }
+
+    // Método para mover el objeto hacia adelante
+moveForward() {
+    const forceMagnitude = 0.1; // Magnitud de la fuerza de movimiento
+
+    // Obtener la dirección hacia adelante del objeto
+    const forward = new THREE.Vector3();
+    this.caja_bolas.getWorldDirection(forward);
+
+    // Aplicar una fuerza en la dirección hacia adelante
+    this.caja_bolas.body.applyForce(forward.x * forceMagnitude, forward.y * forceMagnitude, forward.z * forceMagnitude);
+}
+
+// Método para mover el objeto hacia atrás
+moveBackward() {
+    const forceMagnitude = -0.1; // Magnitud de la fuerza de movimiento
+
+    // Obtener la dirección hacia adelante del objeto
+    const forward = new THREE.Vector3();
+    this.caja_bolas.getWorldDirection(forward);
+
+    // Aplicar una fuerza en la dirección opuesta a la dirección hacia adelante
+    this.caja_bolas.body.applyForce(forward.x * forceMagnitude, forward.y * forceMagnitude, forward.z * forceMagnitude);
+}
 }
 
 const config = {
