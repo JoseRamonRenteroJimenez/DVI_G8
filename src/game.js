@@ -1,14 +1,12 @@
 import Phaser from 'phaser'
 //import { Project, PhysicsLoader , ThirdDimension, ExtendedObject3D, FirstPersonControls, THREE } from 'enable3d'
-import { enable3d, Canvas, Scene3D, ExtendedObject3D, FirstPersonControls, THREE } from '@enable3d/phaser-extension'
+import { enable3d, Canvas, Scene3D, ExtendedObject3D, THREE, FirstPersonControls } from '@enable3d/phaser-extension'
 import './ammo/ammo'
 import './ammo/ammo.wasm'
 
-//3D models
+//3D models./modules/water
 import m4 from "url:../assets/glb/low-poly_rose.glb"
 import caja from "url:../assets/glb/nivel1_1.glb"
-import water1 from "url:../assets/water/Water_1_M_Normal.jpg"
-import water2 from "url:../assets/water/Water_2_M_Normal.jpg"
 
 let alturaAgua = 0;
 
@@ -20,45 +18,21 @@ class MainScene extends Scene3D {
         this.move = { x: 0, y: 0, z: 0 }
     }
 
-    postRender() {
-        this.third.renderer.setViewport(0, 0, window.innerWidth, window.innerHeight)
-        this.third.renderer.render(this.third.scene, this.third.camera)
-
-        this.third.renderer.clearDepth()
-
-        this.third.renderer.setScissorTest(true)
-        this.third.renderer.setScissor(50, 50, 150, 100)
-        this.third.renderer.setViewport(50, 50, 150, 100)
-
-        //this.third.renderer.render(this.third.scene, this.secondCamera)
-
-        this.third.renderer.setScissorTest(false)
-    }
-
     async create() {
+
+        //Controles de primera persona 
+        //setupFirstPersonControls(this);
+
+        //Controles de la cámara
+        //setupCameraControls(this);
+
         this.accessThirdDimension({ maxSubSteps: 10, fixedTimeStep: 1 / 180 })
 
         await this.third.warpSpeed('-orbitControls')
-        //this.third.haveSomeFun(50)
-        this.third.renderer.gammaFactor = 1.5
-        this.third.camera.layers.enable(1) // enable layer 1
-        await this.createWater();
-        // second camera
-        //this.secondCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
-        //this.third.add.existing(this.secondCamera)
-        //this.third.camera.add(this.secondCamera)
-        // this.secondCamera.layers.set(1)
-
-        this.scene.scene.game.events.on('postrender', (renderer, time, delta) => {
-          this.postRender()
-        })
-
-        /**
-         * hashtag3d (https://www.cgtrader.com/hashtag3d)
-         * https://www.cgtrader.com/free-3d-models/military/armor/m4a1-carbine-e81d81d5-cfdb-4c57-be71-5c1b8092f4ea
-         * Editorial License (https://www.cgtrader.com/pages/terms-and-conditions#general-terms-of-licensing)
-         */
         
+        //this.third.haveSomeFun(50)
+        
+        //Cargar habitación
         this.third.load.gltf(caja).then(o => {
             const caja = new ExtendedObject3D();
             caja.add(o.scene);
@@ -71,6 +45,9 @@ class MainScene extends Scene3D {
             this.third.physics.add.existing(body, { mass: 1e-8, shape: 'box', width: 0.2, height: 0.2, depth: 0.2, collisionFlags: 1 })
             console.log(body)
         });
+
+        //Cargar flor
+
         this.third.load.gltf(m4).then(object => {
             const rifle = object.scene
 
@@ -94,10 +71,14 @@ class MainScene extends Scene3D {
         this.redDot = this.add.circle(this.cameras.main.width / 2, this.cameras.main.height / 2, 4, 0xff0000)
         this.redDot.depth = 1
 
+        //add camera
+        this.third.renderer.gammaFactor = 1.5        
+        this.third.camera.layers.enable(1) // enable layer 1
+
         // add player
         this.player = new ExtendedObject3D()
         this.player.position.setY(1)
-
+        
         // add first person controls
         this.firstPersonControls = new FirstPersonControls(this.third.camera, this.player, {})
 
@@ -115,7 +96,6 @@ class MainScene extends Scene3D {
             this.firstPersonControls.update(0, 0)
         })
 
-
         // add keys
         this.keys = {
             w: this.input.keyboard.addKey('w'),
@@ -128,8 +108,6 @@ class MainScene extends Scene3D {
     }
 
     update(time, delta) {
-        alturaAgua = alturaAgua+0.2;
-        //this.createWater();
         if (this.rifle && this.rifle) {
             // some variables
             //const zoom = this.input.mousePointer.rightButtonDown()
@@ -232,22 +210,6 @@ class MainScene extends Scene3D {
             }
         }
     }
-
-    async createWater(){
-        const textures = await Promise.all([
-            this.third.load.texture(water1),
-            this.third.load.texture(water2)
-          ])
-    
-          textures[0].needsUpdate = true
-          textures[1].needsUpdate = true
-    
-          this.third.misc.water({
-            y: alturaAgua,
-            normalMap0: textures[0],
-            normalMap1: textures[1]
-          })
-    }
 }
 
 const config = {
@@ -267,9 +229,3 @@ const config = {
 window.addEventListener('load', () => {
     enable3d(() => new Phaser.Game(config)).withPhysics('/__parcel_source_root/src/ammo');
 });
-//PhysicsLoader('/__parcel_source_root/src/ammo', () => new Project(config))
-//PhysicsLoader('/__parcel_source_root/src/ammo', () => new Phaser.Game(config))
-/*window.addEventListener('load', () => {
-    Project(() => new Phaser.Game(config)).withPhysics('/lib/ammo/kripken')
-})*/
-
