@@ -5,7 +5,7 @@ import './ammo/ammo'
 import './ammo/ammo.wasm'
 
 //Niveles
-import nivel0 from "../src/niveles/nivel0"
+import Nivel0 from "../src/niveles/nivel0"
 
 //3D models./modules/water
 import m4 from "url:../assets/glb/low-poly_rose.glb"
@@ -18,6 +18,7 @@ class MainScene extends Scene3D {
         super({ key: 'MainScene' })
         console.log("MainScene constructor")
         this.move = { x: 0, y: 0, z: 0 }
+        this.objetosArray = []; // Array para almacenar las instancias de CajaBolas
     }
 
     async create() {
@@ -29,7 +30,8 @@ class MainScene extends Scene3D {
         //this.third.haveSomeFun(50)
         
         //Cargamos nivel0
-        const n0 = new nivel0(this)
+        const n0 = new Nivel0(this, this.objetosArray)
+        console.log(this.objetosArray)
 
         //Cargar flor
 
