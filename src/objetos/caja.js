@@ -15,7 +15,7 @@ class Caja extends ExtendedObject3D {
 
             // Configurar el objeto de caja
             this.name = nombre;
-            this.scale.x = this.scale.y = this.scale.z = 0.2;
+            this.scale.x = this.scale.y = this.scale.z = 1;
 
             // Aquí puedes agregar lógica adicional, como la creación de física para el cajón de las bolas
             // Recuerda que necesitarás acceder a `escena.third.physics` y otras propiedades de `escena`
