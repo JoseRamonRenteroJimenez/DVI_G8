@@ -6,7 +6,7 @@ import './ammo/ammo.wasm'
 
 //3D models
 import m4 from "url:../assets/glb/low-poly_rose.glb"
-import nivel1 from "url:../assets/glb/nivel1_3.glb"
+import nivel1 from "url:../assets/glb/nivel1_4.glb"
 import caja_bolas from "url:../assets/glb/caja_bolas.glb"
 
 //cajas
@@ -20,12 +20,34 @@ import caja7 from "url:../assets/glb/caja7.glb"
 
 //cartas
 import carta1 from "url:../assets/glb/carta1.glb"
+import carta2 from "url:../assets/glb/carta2.glb"
+import carta3 from "url:../assets/glb/carta3.glb"
+import carta4 from "url:../assets/glb/carta4.glb"
+
+//bolas
+import bolas1 from "url:../assets/glb/bola1.glb"
+import bolas2 from "url:../assets/glb/bola2.glb"
+import bolas3 from "url:../assets/glb/bola3.glb"
+
+//puertas
+import puerta1 from "url:../assets/glb/puerta1.glb"
+import puerta2 from "url:../assets/glb/puerta2.glb"
+import cristal from "url:../assets/glb/cristal.glb"
+
+//cofre
+import cofre from "url:../assets/glb/cofre_1.glb"
+
+//llave
+import llave from "url:../assets/glb/llave.glb"
+import llave_inv from "url:../assets/glb/llave_inv.glb"
 
 import water1 from "url:../assets/water/Water_1_M_Normal.jpg"
 import water2 from "url:../assets/water/Water_2_M_Normal.jpg"
 import { CollisionEvents } from '@enable3d/ammo-physics/dist/collisionEvents'
 
 let alturaAgua = 0;
+
+
 
 //fetch(m4); fetch(caja);
 class MainScene extends Scene3D {
@@ -34,6 +56,10 @@ class MainScene extends Scene3D {
         super({ key: 'MainScene' })
         console.log("MainScene constructor")
         this.move = { x: 0, y: 0, z: 0 }
+        // Crea una instancia de la clase Inventory
+       // Inicializa el inventario como un array vacío
+       this.inventory = {}; // Objeto para almacenar los objetos del inventario
+       this.currentIndex = 0; // Variable para asignar el próximo índice disponible
     }
 
     postRender() {
@@ -69,12 +95,14 @@ class MainScene extends Scene3D {
           this.postRender()
         })
         
-
         /**
          * hashtag3d (https://www.cgtrader.com/hashtag3d)
          * https://www.cgtrader.com/free-3d-models/military/armor/m4a1-carbine-e81d81d5-cfdb-4c57-be71-5c1b8092f4ea
          * Editorial License (https://www.cgtrader.com/pages/terms-and-conditions#general-terms-of-licensing)
          */
+        // Muestra el inventario en pantalla
+        this.displayInventory();
+
          this.third.load.gltf(nivel1).then(gltf => {
             const cajaMesh = gltf.scene;
             const nivel1 = new ExtendedObject3D();
@@ -174,6 +202,106 @@ class MainScene extends Scene3D {
                 
             });
 
+            this.third.load.gltf(carta2).then(gltf => {
+                const carta2Mesh = gltf.scene;
+                const carta2 = new ExtendedObject3D();
+                carta2.add(carta2Mesh);
+                carta2.name = 'carta2';
+                this.third.physics.add.existing(carta2, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(carta2);
+                
+            });
+
+            this.third.load.gltf(carta3).then(gltf => {
+                const carta3Mesh = gltf.scene;
+                const carta3 = new ExtendedObject3D();
+                carta3.add(carta3Mesh);
+                carta3.name = 'carta3';
+                this.third.physics.add.existing(carta3, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(carta3);
+                
+            });
+
+            this.third.load.gltf(carta4).then(gltf => {
+                const carta4Mesh = gltf.scene;
+                const carta4 = new ExtendedObject3D();
+                carta4.add(carta4Mesh);
+                carta4.name = 'carta4';
+                this.third.physics.add.existing(carta4, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(carta4);
+                
+            });
+
+            this.third.load.gltf(bolas1).then(gltf => {
+                const bolas1Mesh = gltf.scene;
+                const bolas1 = new ExtendedObject3D();
+                bolas1.add(bolas1Mesh);
+                bolas1.name = 'bolas1';
+                this.third.physics.add.existing(bolas1, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(bolas1);
+                
+            });
+
+            this.third.load.gltf(bolas2).then(gltf => {
+                const bolas2Mesh = gltf.scene;
+                const bolas2 = new ExtendedObject3D();
+                bolas2.add(bolas2Mesh);
+                bolas2.name = 'bolas2';
+                this.third.physics.add.existing(bolas2, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(bolas2);
+                
+            });
+
+            this.third.load.gltf(bolas3).then(gltf => {
+                const bolas3Mesh = gltf.scene;
+                const bolas3 = new ExtendedObject3D();
+                bolas3.add(bolas3Mesh);
+                bolas3.name = 'bolas3';
+                this.third.physics.add.existing(bolas3, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(bolas3);
+                
+            });
+
+            this.third.load.gltf(puerta1).then(gltf => {
+                const puerta1Mesh = gltf.scene;
+                const puerta1 = new ExtendedObject3D();
+                puerta1.add(puerta1Mesh);
+                puerta1.name = 'puerta1';
+                this.third.physics.add.existing(puerta1, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(puerta1);
+                
+            });
+
+            this.third.load.gltf(puerta2).then(gltf => {
+                const puerta2Mesh = gltf.scene;
+                const puerta2 = new ExtendedObject3D();
+                puerta2.add(puerta2Mesh);
+                puerta2.name = 'puerta2';
+                this.third.physics.add.existing(puerta2, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(puerta2);
+                
+            });
+
+            this.third.load.gltf(cristal).then(gltf => {
+                const cristalMesh = gltf.scene;
+                const cristal = new ExtendedObject3D();
+                cristal.add(cristalMesh);
+                cristal.name = 'cristal';
+                this.third.physics.add.existing(cristal, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(cristal);
+                
+            });
+
+            this.third.load.gltf(cofre).then(gltf => {
+                const cofreMesh = gltf.scene;
+                const cofre = new ExtendedObject3D();
+                cofre.add(cofreMesh);
+                cofre.name = 'cofre';
+                this.third.physics.add.existing(cofre, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(cofre);
+                
+            });
+
     
 
         this.third.load.gltf(m4).then(object => {
@@ -234,12 +362,11 @@ class MainScene extends Scene3D {
             q: this.input.keyboard.addKey('q'),
             e: this.input.keyboard.addKey('e')
         }
-        this.third.physics.add.collider(this.nivel1, this.player, (nivel1, player) => {
-            // Aquí puedes colocar el código que deseas ejecutar cuando ocurra la colisión
-            // Este callback se llamará cada vez que se produzca una colisión entre nivel1 y player
-            console.log('Colisión entre nivel1 y player');
-        });
-        
+
+
+        // Ejemplo de cómo eliminar un objeto del inventario
+        //const objectToRemoveFromInventory = { name: 'Objeto1' };
+        //this.inventory.removeItem(objectToRemoveFromInventory);
         //this.third.physics.add.collider(this.nivel1,this.player,eventCallback : (event: CollisionEvent));
     }
 
@@ -371,29 +498,22 @@ class MainScene extends Scene3D {
           })
     }
 
-    // Método para mover el objeto hacia adelante
-moveForward() {
-    const forceMagnitude = 0.1; // Magnitud de la fuerza de movimiento
+    addToInventory(item) {
+        // Asigna el próximo índice disponible al objeto y lo agrega al inventario
+        this.inventory[this.currentIndex] = item;
+        this.currentIndex++;
+    }
 
-    // Obtener la dirección hacia adelante del objeto
-    const forward = new THREE.Vector3();
-    this.caja_bolas.getWorldDirection(forward);
-
-    // Aplicar una fuerza en la dirección hacia adelante
-    this.caja_bolas.body.applyForce(forward.x * forceMagnitude, forward.y * forceMagnitude, forward.z * forceMagnitude);
-}
-
-// Método para mover el objeto hacia atrás
-moveBackward() {
-    const forceMagnitude = -0.1; // Magnitud de la fuerza de movimiento
-
-    // Obtener la dirección hacia adelante del objeto
-    const forward = new THREE.Vector3();
-    this.caja_bolas.getWorldDirection(forward);
-
-    // Aplicar una fuerza en la dirección opuesta a la dirección hacia adelante
-    this.caja_bolas.body.applyForce(forward.x * forceMagnitude, forward.y * forceMagnitude, forward.z * forceMagnitude);
-}
+    // Método para mostrar el inventario en pantalla
+    displayInventory() {
+        this.inventarioText = this.add.text(32, this.cameras.main.height - 32, 'inventario: [   ] [   ] [   ] [   ] ', {
+            fontSize: '32px',
+            fill: '#000'
+          })
+          this.inventarioText.setOrigin(0, 1)
+          this.inventarioText.depth = 1
+        // Aquí va tu lógica para mostrar el inventario en pantalla
+    }
 }
 
 const config = {
