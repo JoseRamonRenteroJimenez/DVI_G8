@@ -74,7 +74,7 @@ class MainScene extends Scene3D {
         //await this.createWater();
         
         // Muestra el inventario en pantalla
-        //this.displayInventory();
+        this.displayInventory();
         /*
          this.third.load.gltf(nivel1).then(gltf => {
             const cajaMesh = gltf.scene;
@@ -474,6 +474,23 @@ class MainScene extends Scene3D {
             normalMap1: textures[1]
           })
     }*/
+
+    addToInventory(item) {
+        // Asigna el próximo índice disponible al objeto y lo agrega al inventario
+        this.inventory[this.currentIndex] = item;
+        this.currentIndex++;
+    }
+
+    // Método para mostrar el inventario en pantalla
+    displayInventory() {
+        this.inventarioText = this.add.text(32, this.cameras.main.height - 32, 'inventario: [   ] [   ] [   ] [   ] ', {
+            fontSize: '32px',
+            fill: '#000'
+          })
+          this.inventarioText.setOrigin(0, 1)
+          this.inventarioText.depth = 1
+        // Aquí va tu lógica para mostrar el inventario en pantalla
+    }
 }
 
 const config = {
