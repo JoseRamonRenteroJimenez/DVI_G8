@@ -1,6 +1,5 @@
 //Bibliotecas
-import {ExtendedObject3D} from '@enable3d/phaser-extension'
-
+import {ExtendedObject3D, CollisionEvents} from '@enable3d/phaser-extension'
 
 // Clase base para las cajas
 class Caja extends ExtendedObject3D {
@@ -17,7 +16,9 @@ class Caja extends ExtendedObject3D {
             this.name = nombre;
             this.scale.x = this.scale.y = this.scale.z = 1;
 
-            // Aquí puedes agregar lógica adicional, como la creación de física para el cajón de las bolas
+            escena.third.physics.add.existing(this, { mass: 10 ,collisionFlags: 2});
+
+            // Aquí puedes agregar lógica adicional, como la creación de física para las cajas
             // Recuerda que necesitarás acceder a `escena.third.physics` y otras propiedades de `escena`
         }).catch(error => {
             console.error(`Error al cargar ${nombre}:`, error);

@@ -9,6 +9,7 @@ import Nivel0 from "../src/niveles/nivel0"
 
 //3D models./modules/water
 import m4 from "url:../assets/glb/low-poly_rose.glb"
+/*
 import nivel1 from "url:../assets/glb/nivel1_4.glb"
 import caja_bolas from "url:../assets/glb/caja_bolas.glb"
 
@@ -39,19 +40,13 @@ import cristal from "url:../assets/glb/cristal.glb"
 
 //cofre
 import cofre from "url:../assets/glb/cofre_1.glb"
-
+*/
 //llave
 import llave from "url:../assets/glb/llave.glb"
 import llave_inv from "url:../assets/glb/llave_inv.glb"
 
-import water1 from "url:../assets/water/Water_1_M_Normal.jpg"
-import water2 from "url:../assets/water/Water_2_M_Normal.jpg"
 import { CollisionEvents } from '@enable3d/ammo-physics/dist/collisionEvents'
 import { Object3D } from 'three'
-
-
-let alturaAgua = 0;
-
 
 
 class MainScene extends Scene3D {
@@ -61,10 +56,10 @@ class MainScene extends Scene3D {
         console.log("MainScene constructor")
         this.move = { x: 0, y: 0, z: 0 }
         // Crea una instancia de la clase Inventory
-       // Inicializa el inventario como un array vacío
-       this.inventory = {}; // Objeto para almacenar los objetos del inventario
-       this.currentIndex = 0; // Variable para asignar el próximo índice disponible
-        this.objetosArray = []; // Array para almacenar las instancias de CajaBolas
+        // Inicializa el inventario como un array vacío
+        this.inventory = {}; // Objeto para almacenar los objetos del inventario
+        this.currentIndex = 0; // Variable para asignar el próximo índice disponible
+        this.objetosArray = []; // Array para almacenar las instancias de los objetos
     }
 
     async create() {
@@ -94,7 +89,7 @@ class MainScene extends Scene3D {
          */
         // Muestra el inventario en pantalla
         this.displayInventory();
-
+        /*
          this.third.load.gltf(nivel1).then(gltf => {
             const cajaMesh = gltf.scene;
             const nivel1 = new ExtendedObject3D();
@@ -292,12 +287,9 @@ class MainScene extends Scene3D {
                 this.third.physics.add.existing(cofre, { mass: 10 ,collisionFlags: 2});
                 this.third.add.existing(cofre);
                 
-            });
+            });*/
 
-    
-
-        
-        //Cargamos nivel0
+        //Cargamos nivel0 con los objetos
         const n0 = new Nivel0(this, this.objetosArray)
         console.log(this.objetosArray)
 
@@ -335,8 +327,6 @@ class MainScene extends Scene3D {
         this.player.position.setY(5)
         this.player.position.setX(-1)
         this.player.position.setZ(2)
-        
-
 
         // add first person controls
         this.firstPersonControls = new FirstPersonControls(this.third.camera, this.player, {})

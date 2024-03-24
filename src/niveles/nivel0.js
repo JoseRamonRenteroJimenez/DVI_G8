@@ -1,15 +1,21 @@
 //Bibliotecas
-import {ExtendedObject3D} from '@enable3d/phaser-extension'
+import {ExtendedObject3D, CollisionEvents} from '@enable3d/phaser-extension'
 
 //Escenario
 //Clases
 
 //Modelos
-import base from "url:../../assets/glb/nivel1_3.glb"
+import base from "url:../../assets/glb/nivel1_4.glb"
 
 //Objetos adicionales
 //Clases
 import Caja from "../objetos/caja.js"
+import Carta from "../objetos/carta.js"
+import Bola from "../objetos/bola.js"
+import Cofre from "../objetos/cofre.js"
+import Cristal from '../objetos/cristal.js'
+import Llave from '../objetos/llave.js'
+import Puerta from '../objetos/puerta.js'
 
 //Modelos
 import modeloCajaBolas from "url:../../assets/glb/caja_bolas.glb"
@@ -21,6 +27,24 @@ import modeloCaja5 from "url:../../assets/glb/caja5.glb"
 import modeloCaja6 from "url:../../assets/glb/caja7.glb"
 import modeloCaja7 from "url:../../assets/glb/caja7.glb"
 
+import modeloCarta1 from "url:../../assets/glb/carta1.glb"
+import modeloCarta2 from "url:../../assets/glb/carta2.glb"
+import modeloCarta3 from "url:../../assets/glb/carta3.glb"
+import modeloCarta4 from "url:../../assets/glb/carta4.glb"
+
+import modeloBola1 from "url:../../assets/glb/bola1.glb"
+import modeloBola2 from "url:../../assets/glb/bola2.glb"
+import modeloBola3 from "url:../../assets/glb/bola3.glb"
+
+import modeloPuerta1 from "url:../../assets/glb/puerta1.glb"
+import modeloPuerta2 from "url:../../assets/glb/puerta2.glb"
+import modeloCristal from "url:../../assets/glb/cristal.glb"
+
+import modeloCofre from "url:../../assets/glb/cofre_1.glb"
+
+import modeloLlave from "url:../../assets/glb/llave.glb"
+import modeloLlave_inv from "url:../../assets/glb/llave_inv.glb"
+
 // Nombres de los modelos para las cajas del 1 al 7
 const modelosCajas = [
     modeloCaja1,
@@ -30,6 +54,29 @@ const modelosCajas = [
     modeloCaja5,
     modeloCaja6,
     modeloCaja7
+]
+
+const modelosCartas = [
+    modeloCarta1,
+    modeloCarta2,
+    modeloCarta3,
+    modeloCarta4
+]
+
+const modelosBolas = [
+    modeloBola1,
+    modeloBola2,
+    modeloBola3
+]
+
+const modelosPuertas = [
+    modeloPuerta1,
+    modeloPuerta2
+]
+
+const modelosLlaves = [
+    modeloLlave,
+    modeloLlave_inv
 ]
 
 class Nivel0 extends ExtendedObject3D {
@@ -49,8 +96,6 @@ class Nivel0 extends ExtendedObject3D {
 
             // Agregar el objeto de nivel a la escena principal
             escena.third.add.existing(this);
-
-            // Creo objeto y lo añado al array
             
             //Caja que guarda las bolas
             const cajaBolas = new Caja(escena, modeloCajaBolas, 'Caja Bolas')
@@ -65,32 +110,47 @@ class Nivel0 extends ExtendedObject3D {
                 this.add(caja); // Añadir la caja a la escena
                 arrayObjetos.push(caja); // Agregar la caja al array de objetos
             }
-            
-            /*
-            //Caja1
-            const caja1 = new Caja(escena, modeloCaja1, 'Caja 1')
-            this.add(caja1)
-            arrayObjetos.push(caja1)
 
-            //Caja2
-            const caja2 = new Caja(escena, modeloCaja2, 'Caja 2')
-            this.add(caja2)
-            arrayObjetos.push(caja2)
-            */
-            //Caja3
+            // Instanciación trozos carta 1 a 4
+            for (let i = 0; i < modelosCartas.length; i++) {
+                const nombreCarta = `Carta ${i + 1}`; // Nombre de la carta (Carta 1, Carta 2, ..., Carta 4)
+                const modeloCarta = modelosCartas[i]; // Ruta del modelo de la carta
+                const carta = new Carta(escena, modeloCarta, nombreCarta); // Instancia de la carta
+                this.add(carta); // Añadir la carta a la escena
+                arrayObjetos.push(carta); // Agregar la carta al array de objetos
+            }
 
-            //Caja4
+            // Instanciación bolas 1 a 3
+            for (let i = 0; i < modelosBolas.length; i++) {
+                const nombreBola = `Bola ${i + 1}`; // Nombre de la bola
+                const modeloBola = modelosBolas[i]; // Ruta del modelo de la bola
+                const bola = new Bola(escena, modeloBola, nombreBola); // Instancia de la bola
+                this.add(bola); // Añadir la bola a la escena
+                arrayObjetos.push(bola); // Agregar la bola al array de objetos
+            }
 
-            //Caja5
+            // Instanciación puertas 1 y 2
+            for (let i = 0; i < modelosPuertas.length; i++) {
+                const nombrePuerta = `Puerta ${i + 1}`; // Nombre de la Puerta
+                const modeloPuerta = modelosPuertas[i]; // Ruta del modelo de la Puerta
+                const puerta = new Puerta(escena, modeloPuerta, nombrePuerta); // Instancia de la Puerta
+                this.add(puerta); // Añadir la puerta a la escena
+                arrayObjetos.push(puerta); // Agregar la puerta al array de objetos
+            }
 
-            //Caja6
+            //Instanciación cristal
+            const nombreCristal = `Cristal`; // Nombre del cristal
+            const cristal = new Cristal(escena, modeloCristal, nombreCristal); // Instancia del cristal
+            this.add(cristal); // Añadir el cristal a la escena
+            arrayObjetos.push(cristal); // Agregar el cristal al array de objetos
 
-            //Caja7
+            //Instanciación cristal
+            const nombreCofre = `Cofre`; // Nombre del cofre
+            const cofre = new Cofre(escena, modeloCofre, nombreCofre); // Instancia del cofre
+            this.add(cofre); // Añadir el cofre a la escena
+            arrayObjetos.push(cofre); // Agregar el cofre al array de objetos
 
-            //Carta1
-
-
-
+            //Llave
 
 
 
