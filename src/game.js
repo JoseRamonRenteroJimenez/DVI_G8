@@ -9,15 +9,61 @@ import Nivel0 from "../src/niveles/nivel0"
 
 //3D models./modules/water
 import m4 from "url:../assets/glb/low-poly_rose.glb"
+import nivel1 from "url:../assets/glb/nivel1_4.glb"
+import caja_bolas from "url:../assets/glb/caja_bolas.glb"
+
+//cajas
+import caja1 from "url:../assets/glb/caja1.glb"
+import caja2 from "url:../assets/glb/caja2.glb"
+import caja3 from "url:../assets/glb/caja3.glb"
+import caja4 from "url:../assets/glb/caja4.glb"
+import caja5 from "url:../assets/glb/caja5.glb"
+import caja6 from "url:../assets/glb/caja6.glb"
+import caja7 from "url:../assets/glb/caja7.glb"
+
+//cartas
+import carta1 from "url:../assets/glb/carta1.glb"
+import carta2 from "url:../assets/glb/carta2.glb"
+import carta3 from "url:../assets/glb/carta3.glb"
+import carta4 from "url:../assets/glb/carta4.glb"
+
+//bolas
+import bolas1 from "url:../assets/glb/bola1.glb"
+import bolas2 from "url:../assets/glb/bola2.glb"
+import bolas3 from "url:../assets/glb/bola3.glb"
+
+//puertas
+import puerta1 from "url:../assets/glb/puerta1.glb"
+import puerta2 from "url:../assets/glb/puerta2.glb"
+import cristal from "url:../assets/glb/cristal.glb"
+
+//cofre
+import cofre from "url:../assets/glb/cofre_1.glb"
+
+//llave
+import llave from "url:../assets/glb/llave.glb"
+import llave_inv from "url:../assets/glb/llave_inv.glb"
+
+import water1 from "url:../assets/water/Water_1_M_Normal.jpg"
+import water2 from "url:../assets/water/Water_2_M_Normal.jpg"
+import { CollisionEvents } from '@enable3d/ammo-physics/dist/collisionEvents'
 import { Object3D } from 'three'
+
+
+let alturaAgua = 0;
 
 
 
 class MainScene extends Scene3D {
+
     constructor() {
         super({ key: 'MainScene' })
         console.log("MainScene constructor")
         this.move = { x: 0, y: 0, z: 0 }
+        // Crea una instancia de la clase Inventory
+       // Inicializa el inventario como un array vacío
+       this.inventory = {}; // Objeto para almacenar los objetos del inventario
+       this.currentIndex = 0; // Variable para asignar el próximo índice disponible
         this.objetosArray = []; // Array para almacenar las instancias de CajaBolas
     }
 
@@ -28,6 +74,228 @@ class MainScene extends Scene3D {
         await this.third.warpSpeed('-orbitControls')
         
         //this.third.haveSomeFun(50)
+        this.third.renderer.gammaFactor = 1.5
+        this.third.camera.layers.enable(1) // enable layer 1
+        //await this.createWater();
+        // second camera
+        //this.secondCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
+        //this.third.add.existing(this.secondCamera)
+        //this.third.camera.add(this.secondCamera)
+        // this.secondCamera.layers.set(1)
+
+        this.scene.scene.game.events.on('postrender', (renderer, time, delta) => {
+          this.postRender()
+        })
+        
+        /**
+         * hashtag3d (https://www.cgtrader.com/hashtag3d)
+         * https://www.cgtrader.com/free-3d-models/military/armor/m4a1-carbine-e81d81d5-cfdb-4c57-be71-5c1b8092f4ea
+         * Editorial License (https://www.cgtrader.com/pages/terms-and-conditions#general-terms-of-licensing)
+         */
+        // Muestra el inventario en pantalla
+        this.displayInventory();
+
+         this.third.load.gltf(nivel1).then(gltf => {
+            const cajaMesh = gltf.scene;
+            const nivel1 = new ExtendedObject3D();
+            nivel1.add(cajaMesh);
+            nivel1.name = 'nivel1';
+            this.third.physics.add.existing(nivel1, { mass: 10, collisionFlags: 2 });
+            this.third.add.existing(nivel1);
+            });
+            
+         this.third.load.gltf(caja_bolas).then(gltf => {
+            const cajaBolasMesh = gltf.scene;
+            const caja_bolas = new ExtendedObject3D();
+            caja_bolas.add(cajaBolasMesh);
+            caja_bolas.name = 'caja_bolas';
+            this.third.physics.add.existing(caja_bolas, { mass: 10 ,collisionFlags: 2});
+            this.third.add.existing(caja_bolas);
+        
+            });
+
+            this.third.load.gltf(caja1).then(gltf => {
+                const caja1Mesh = gltf.scene;
+                const caja1 = new ExtendedObject3D();
+                caja1.add(caja1Mesh);
+                caja1.name = 'caja1';
+                this.third.physics.add.existing(caja1, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja1);
+            
+            });
+
+            this.third.load.gltf(caja2).then(gltf => {
+                const caja2Mesh = gltf.scene;
+                const caja2 = new ExtendedObject3D();
+                caja2.add(caja2Mesh);
+                caja2.name = 'caja2';
+                this.third.physics.add.existing(caja2, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja2);
+                
+            });
+
+            this.third.load.gltf(caja3).then(gltf => {
+                const caja3Mesh = gltf.scene;
+                const caja3 = new ExtendedObject3D();
+                caja3.add(caja3Mesh);
+                caja3.name = 'caja3';
+                this.third.physics.add.existing(caja3, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja3);
+                
+            });
+
+            this.third.load.gltf(caja4).then(gltf => {
+                const caja4Mesh = gltf.scene;
+                const caja4 = new ExtendedObject3D();
+                caja4.add(caja4Mesh);
+                caja4.name = 'caja4';
+                this.third.physics.add.existing(caja4, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja4);
+                
+            });
+
+            this.third.load.gltf(caja5).then(gltf => {
+                const caja5Mesh = gltf.scene;
+                const caja5 = new ExtendedObject3D();
+                caja5.add(caja5Mesh);
+                caja5.name = 'caja5';
+                this.third.physics.add.existing(caja5, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja5);
+                
+            });
+
+            this.third.load.gltf(caja6).then(gltf => {
+                const caja6Mesh = gltf.scene;
+                const caja6 = new ExtendedObject3D();
+                caja6.add(caja6Mesh);
+                caja6.name = 'caja6';
+                this.third.physics.add.existing(caja6, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja6);
+                
+            });
+
+            this.third.load.gltf(caja7).then(gltf => {
+                const caja7Mesh = gltf.scene;
+                const caja7 = new ExtendedObject3D();
+                caja7.add(caja7Mesh);
+                caja7.name = 'caja7';
+                this.third.physics.add.existing(caja7, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(caja7);
+                
+            });
+
+            this.third.load.gltf(carta1).then(gltf => {
+                const carta1Mesh = gltf.scene;
+                const carta1 = new ExtendedObject3D();
+                carta1.add(carta1Mesh);
+                carta1.name = 'carta1';
+                this.third.physics.add.existing(carta1, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(carta1);
+                
+            });
+
+            this.third.load.gltf(carta2).then(gltf => {
+                const carta2Mesh = gltf.scene;
+                const carta2 = new ExtendedObject3D();
+                carta2.add(carta2Mesh);
+                carta2.name = 'carta2';
+                this.third.physics.add.existing(carta2, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(carta2);
+                
+            });
+
+            this.third.load.gltf(carta3).then(gltf => {
+                const carta3Mesh = gltf.scene;
+                const carta3 = new ExtendedObject3D();
+                carta3.add(carta3Mesh);
+                carta3.name = 'carta3';
+                this.third.physics.add.existing(carta3, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(carta3);
+                
+            });
+
+            this.third.load.gltf(carta4).then(gltf => {
+                const carta4Mesh = gltf.scene;
+                const carta4 = new ExtendedObject3D();
+                carta4.add(carta4Mesh);
+                carta4.name = 'carta4';
+                this.third.physics.add.existing(carta4, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(carta4);
+                
+            });
+
+            this.third.load.gltf(bolas1).then(gltf => {
+                const bolas1Mesh = gltf.scene;
+                const bolas1 = new ExtendedObject3D();
+                bolas1.add(bolas1Mesh);
+                bolas1.name = 'bolas1';
+                this.third.physics.add.existing(bolas1, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(bolas1);
+                
+            });
+
+            this.third.load.gltf(bolas2).then(gltf => {
+                const bolas2Mesh = gltf.scene;
+                const bolas2 = new ExtendedObject3D();
+                bolas2.add(bolas2Mesh);
+                bolas2.name = 'bolas2';
+                this.third.physics.add.existing(bolas2, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(bolas2);
+                
+            });
+
+            this.third.load.gltf(bolas3).then(gltf => {
+                const bolas3Mesh = gltf.scene;
+                const bolas3 = new ExtendedObject3D();
+                bolas3.add(bolas3Mesh);
+                bolas3.name = 'bolas3';
+                this.third.physics.add.existing(bolas3, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(bolas3);
+                
+            });
+
+            this.third.load.gltf(puerta1).then(gltf => {
+                const puerta1Mesh = gltf.scene;
+                const puerta1 = new ExtendedObject3D();
+                puerta1.add(puerta1Mesh);
+                puerta1.name = 'puerta1';
+                this.third.physics.add.existing(puerta1, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(puerta1);
+                
+            });
+
+            this.third.load.gltf(puerta2).then(gltf => {
+                const puerta2Mesh = gltf.scene;
+                const puerta2 = new ExtendedObject3D();
+                puerta2.add(puerta2Mesh);
+                puerta2.name = 'puerta2';
+                this.third.physics.add.existing(puerta2, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(puerta2);
+                
+            });
+
+            this.third.load.gltf(cristal).then(gltf => {
+                const cristalMesh = gltf.scene;
+                const cristal = new ExtendedObject3D();
+                cristal.add(cristalMesh);
+                cristal.name = 'cristal';
+                this.third.physics.add.existing(cristal, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(cristal);
+                
+            });
+
+            this.third.load.gltf(cofre).then(gltf => {
+                const cofreMesh = gltf.scene;
+                const cofre = new ExtendedObject3D();
+                cofre.add(cofreMesh);
+                cofre.name = 'cofre';
+                this.third.physics.add.existing(cofre, { mass: 10 ,collisionFlags: 2});
+                this.third.add.existing(cofre);
+                
+            });
+
+    
+
         
         //Cargamos nivel0
         const n0 = new Nivel0(this, this.objetosArray)
@@ -64,8 +332,12 @@ class MainScene extends Scene3D {
 
         // add player
         this.player = new ExtendedObject3D()
-        this.player.position.setY(1)
+        this.player.position.setY(5)
+        this.player.position.setX(-1)
+        this.player.position.setZ(2)
         
+
+
         // add first person controls
         this.firstPersonControls = new FirstPersonControls(this.third.camera, this.player, {})
 
@@ -92,9 +364,17 @@ class MainScene extends Scene3D {
             q: this.input.keyboard.addKey('q'),
             e: this.input.keyboard.addKey('e')
         }
+
+
+        // Ejemplo de cómo eliminar un objeto del inventario
+        //const objectToRemoveFromInventory = { name: 'Objeto1' };
+        //this.inventory.removeItem(objectToRemoveFromInventory);
+        //this.third.physics.add.collider(this.nivel1,this.player,eventCallback : (event: CollisionEvent));
     }
 
     update(time, delta) {
+        alturaAgua = alturaAgua+0.2;
+        //this.createWater();
         if (this.rifle && this.rifle) {
             // some variables
             //const zoom = this.input.mousePointer.rightButtonDown()
@@ -166,8 +446,8 @@ class MainScene extends Scene3D {
 
             // move sideways
             if (this.keys.a.isDown) {
-                this.player.position.x += Math.sin(theta + Math.PI * 0.5) * speed
-                this.player.position.z += Math.cos(theta + Math.PI * 0.5) * speed
+               this.player.position.x += Math.sin(theta + Math.PI * 0.5) * speed
+               this.player.position.z += Math.cos(theta + Math.PI * 0.5) * speed
             } else if (this.keys.d.isDown) {
                 this.player.position.x += Math.sin(theta - Math.PI * 0.5) * speed
                 this.player.position.z += Math.cos(theta - Math.PI * 0.5) * speed
@@ -196,6 +476,27 @@ class MainScene extends Scene3D {
                 sphere.body.applyForce(pos.x * force, pos.y * force, pos.z * force)
             }
         }
+        // Para mover hacia adelante
+        //this.caja_bolas.position.x += 0.1; // Ajusta la velocidad como desees
+
+        //this.caja_bolas.position.x = (Math.sin(time) + 1) * 5 + 12
+        //this.caja_bolas.body.needUpdate = true
+    }
+
+    async createWater(){
+        const textures = await Promise.all([
+            this.third.load.texture(water1),
+            this.third.load.texture(water2)
+          ])
+    
+          textures[0].needsUpdate = true
+          textures[1].needsUpdate = true
+    
+          this.third.misc.water({
+            y: alturaAgua,
+            normalMap0: textures[0],
+            normalMap1: textures[1]
+          })
     }
 }
 
