@@ -152,15 +152,6 @@ class Nivel0 extends ExtendedObject3D {
 
             //Llave
 
-
-
-
-
-
-
-            console.log(this); // Imprimir información sobre el objeto de nivel
-            console.log(escena.objetosArray)
-
             //const body = this.third.add.box({ width: caja.scale.z, height: caja.scale.y, depth: caja.scale.z }, { lambert: { color: 'red', transparent: true, opacity: 0.5 } })
             //this.third.physics.add.existing(body, { mass: 1e-8, shape: 'box', width: 0.2, height: 0.2, depth: 0.2, collisionFlags: 1 })
             

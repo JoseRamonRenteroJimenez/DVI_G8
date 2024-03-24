@@ -24,6 +24,19 @@ class Llave extends ExtendedObject3D {
             console.error(`Error al cargar ${nombre}:`, error);
         });
     }
+
+    // Método para actualizar la posición y la física de la llave
+    update(time) {
+        // Mover las coordenadas del objeto actual
+        const amplitude = 2; // Reducir la amplitud para limitar el movimiento
+        const speed = 0.01; // Ajustar la velocidad para controlar la suavidad del movimiento
+
+        this.position.x = amplitude * Math.sin(speed * time);
+        // Si el objeto tiene un cuerpo físico, indicar que necesita actualización
+        if (this.body) {
+            this.body.needUpdate = true;
+        }
+    }
 }
 
 export default Llave

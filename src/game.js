@@ -59,7 +59,7 @@ class MainScene extends Scene3D {
         // Inicializa el inventario como un array vacío
         this.inventory = {}; // Objeto para almacenar los objetos del inventario
         this.currentIndex = 0; // Variable para asignar el próximo índice disponible
-        this.objetosArray = []; // Array para almacenar las instancias de los objetos
+        this.objetosArray = [] // Array para almacenar las instancias de los objetos
     }
 
     async create() {
@@ -349,6 +349,17 @@ class MainScene extends Scene3D {
     }
 
     update(time, delta) {
+
+        // Recorrer todos los objetos en el array objetosArray
+        for (let i = 0; i < this.objetosArray.length; i++) {
+            // Verificar si el objeto en la posición actual del array no es nulo
+            if (this.objetosArray[i]) {
+                // Llamar al método update del objeto actual
+                this.objetosArray[i].update(time);
+            }
+        }
+
+        
         //alturaAgua = alturaAgua+0.2;
         //this.createWater();
         if (this.rifle && this.rifle) {
