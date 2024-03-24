@@ -86,7 +86,8 @@ class Nivel0 extends ExtendedObject3D {
         
         // Cargar habitación
         escena.third.load.gltf(base).then(object => {
-
+            console.log(object);
+            //object.scene.children contiene los objetos del modelo 3d.
             // Agregar nivel0 como hijo de nivel
             this.add(object.scene);
 

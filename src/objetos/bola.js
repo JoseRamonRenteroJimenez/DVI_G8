@@ -16,8 +16,8 @@ class Bola extends ExtendedObject3D {
             this.name = nombre;
             this.scale.x = this.scale.y = this.scale.z = 1;
 
-            escena.third.physics.add.existing(this, { mass: 10 ,collisionFlags: 2});
-
+            escena.third.physics.add.existing(this, { shape: 'sphere', mass: 10 ,collisionFlags: 2});
+            //escena.third.physics.add.sphere()
             // Aquí puedes agregar lógica adicional, como la creación de física para las bolas
             // Recuerda que necesitarás acceder a `escena.third.physics` y otras propiedades de `escena`
         }).catch(error => {
@@ -36,6 +36,9 @@ class Bola extends ExtendedObject3D {
         if (this.body) {
             this.body.needUpdate = true;
         }
+    }
+    interactuar() {//funcion que se llama al pulsar E sobre el objeto
+        //cojer para lanzar.
     }
 }
 

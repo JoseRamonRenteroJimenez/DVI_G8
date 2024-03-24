@@ -6,7 +6,7 @@ class Caja extends ExtendedObject3D {
     constructor(escena, modeloURL, nombre) {
         super({ key: nombre })
         this.move = { x: 0, y: 0, z: 0 }
-
+        this.startMove = false;
         // Cargar caja
         escena.third.load.gltf(modeloURL).then(object => {
             // Agregar caja como hijo de la escena
@@ -28,6 +28,7 @@ class Caja extends ExtendedObject3D {
     // Método para actualizar la posición y la física de la Caja
     update(time) {
         // Mover las coordenadas del objeto actual
+        if(!this.startMove) return;
         const amplitude = 2; // Reducir la amplitud para limitar el movimiento
         const speed = 0.01; // Ajustar la velocidad para controlar la suavidad del movimiento
 
@@ -36,6 +37,9 @@ class Caja extends ExtendedObject3D {
         if (this.body) {
             this.body.needUpdate = true;
         }
+    }
+    interactuar() {//funcion que se llama al pulsar E sobre el objeto
+        //start move al offset
     }
 }
 
