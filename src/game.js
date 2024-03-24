@@ -72,23 +72,9 @@ class MainScene extends Scene3D {
         this.third.renderer.gammaFactor = 1.5
         this.third.camera.layers.enable(1) // enable layer 1
         //await this.createWater();
-        // second camera
-        //this.secondCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
-        //this.third.add.existing(this.secondCamera)
-        //this.third.camera.add(this.secondCamera)
-        // this.secondCamera.layers.set(1)
-
-        this.scene.scene.game.events.on('postrender', (renderer, time, delta) => {
-          this.postRender()
-        })
         
-        /**
-         * hashtag3d (https://www.cgtrader.com/hashtag3d)
-         * https://www.cgtrader.com/free-3d-models/military/armor/m4a1-carbine-e81d81d5-cfdb-4c57-be71-5c1b8092f4ea
-         * Editorial License (https://www.cgtrader.com/pages/terms-and-conditions#general-terms-of-licensing)
-         */
         // Muestra el inventario en pantalla
-        this.displayInventory();
+        //this.displayInventory();
         /*
          this.third.load.gltf(nivel1).then(gltf => {
             const cajaMesh = gltf.scene;
@@ -363,7 +349,7 @@ class MainScene extends Scene3D {
     }
 
     update(time, delta) {
-        alturaAgua = alturaAgua+0.2;
+        //alturaAgua = alturaAgua+0.2;
         //this.createWater();
         if (this.rifle && this.rifle) {
             // some variables
@@ -473,7 +459,7 @@ class MainScene extends Scene3D {
         //this.caja_bolas.body.needUpdate = true
     }
 
-    async createWater(){
+    /*async createWater(){
         const textures = await Promise.all([
             this.third.load.texture(water1),
             this.third.load.texture(water2)
@@ -487,7 +473,7 @@ class MainScene extends Scene3D {
             normalMap0: textures[0],
             normalMap1: textures[1]
           })
-    }
+    }*/
 }
 
 const config = {

@@ -92,7 +92,7 @@ class Nivel0 extends ExtendedObject3D {
 
             // Configurar el objeto de nivel
             this.name = "Nivel_0";
-            this.scale.x = this.scale.y = this.scale.z = 0.2;
+            this.scale.x = this.scale.y = this.scale.z = 1;
 
             // Agregar el objeto de nivel a la escena principal
             escena.third.add.existing(this);
