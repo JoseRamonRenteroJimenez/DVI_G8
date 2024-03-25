@@ -10,7 +10,7 @@ class Bola extends ExtendedObject3D {
         // Cargar caja
         escena.third.load.gltf(modeloURL).then(object => {
             // Agregar carta como hijo de la escena
-            this.add(object.scene);
+            this.add(object.scene.children[0]);
 
             // Configurar el objeto de bola
             this.name = nombre;
@@ -37,8 +37,9 @@ class Bola extends ExtendedObject3D {
             this.body.needUpdate = true;
         }
     }
-    interactuar() {//funcion que se llama al pulsar E sobre el objeto
+    interact() {//funcion que se llama al pulsar E sobre el objeto
         //cojer para lanzar.
+        console.log("interacted with", this.name);
     }
 }
 

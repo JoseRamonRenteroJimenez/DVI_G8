@@ -1,6 +1,6 @@
 import Phaser from 'phaser'
 //import { Project, PhysicsLoader , ThirdDimension, ExtendedObject3D, FirstPersonControls, THREE } from 'enable3d'
-import { enable3d, Canvas, Scene3D, ExtendedObject3D, THREE, FirstPersonControls } from '@enable3d/phaser-extension'
+import { enable3d, Canvas, Scene3D, ExtendedObject3D, THREE, FirstPersonControls, ExtendedMesh } from '@enable3d/phaser-extension'
 import './ammo/ammo'
 import './ammo/ammo.wasm'
 
@@ -46,7 +46,8 @@ import llave from "url:../assets/glb/llave.glb"
 import llave_inv from "url:../assets/glb/llave_inv.glb"
 
 import { CollisionEvents } from '@enable3d/ammo-physics/dist/collisionEvents'
-import { Object3D } from 'three'
+import { Mesh, Object3D } from 'three'
+import Caja from './objetos/caja'
 
 
 class MainScene extends Scene3D {
@@ -60,6 +61,8 @@ class MainScene extends Scene3D {
         this.inventory = {}; // Objeto para almacenar los objetos del inventario
         this.currentIndex = 0; // Variable para asignar el próximo índice disponible
         this.objetosArray = [] // Array para almacenar las instancias de los objetos
+        this.objectLookingAt = undefined;
+        this.keyEDown = false;
     }
 
     async create() {
@@ -75,6 +78,8 @@ class MainScene extends Scene3D {
         
         // Muestra el inventario en pantalla
         this.displayInventory();
+
+        this.objetosArray.push(this.third.physics.add.ground({ y: 0.5, width: 4, height: 4, name: 'ground-1'}));
         /*
          this.third.load.gltf(nivel1).then(gltf => {
             const cajaMesh = gltf.scene;
@@ -277,7 +282,7 @@ class MainScene extends Scene3D {
 
         //Cargamos nivel0 con los objetos
         const n0 = new Nivel0(this, this.objetosArray)
-        console.log(this.objetosArray)
+        console.log("objetosArray", this.objetosArray)
 
         //Cargar flor
 
@@ -353,7 +358,7 @@ class MainScene extends Scene3D {
         // Recorrer todos los objetos en el array objetosArray
         for (let i = 0; i < this.objetosArray.length; i++) {
             // Verificar si el objeto en la posición actual del array no es nulo
-            if (this.objetosArray[i]) {
+            if (this.objetosArray[i] && this.objetosArray[i].update) {
                 // Llamar al método update del objeto actual
                 this.objetosArray[i].update(time);
             }
@@ -398,18 +403,23 @@ class MainScene extends Scene3D {
                     0,
                     Math.cos(theta + Math.PI * 0.5) * 0.4
                 )
-            } else if (this.keys.e.isDown) {
-                this.third.camera.rotateZ(-0.2)
+            } else if (this.keys.e.isDown && !this.keyEDown) {//interactuar con odjeto en objectLookingAt
+                this.keyEDown = true;
+                /*this.third.camera.rotateZ(-0.2)
                 this.firstPersonControls.offset = new THREE.Vector3(
                     Math.sin(theta - Math.PI * 0.5) * 0.4,
                     0,
                     Math.cos(theta - Math.PI * 0.5) * 0.4
-                )
+                )*/
+                if(this.objectLookingAt) {
+                    //console.log(this.objectLookingAt);
+                    this.objectLookingAt.object.parent.interact();
+                }
             } else {
                 this.third.camera.rotateZ(0)
                 this.firstPersonControls.offset = new THREE.Vector3(0, 0, 0)
             }
-
+            if(this.keys.e.isUp) this.keyEDown = false;
             // adjust the position of the rifle to the camera
             const raycaster = new THREE.Raycaster()
             // x and y are normalized device coordinates from -1 to +1
@@ -421,6 +431,21 @@ class MainScene extends Scene3D {
 
             this.rifle.position.copy(pos)
             this.rifle.rotation.copy(this.third.camera.rotation)
+
+            //object raycaster
+            raycaster.setFromCamera({x: 0, y: 0}, this.third.camera);
+            let result = [];
+            raycaster.intersectObjects(this.objetosArray, true, result);
+            
+            if(result.length === 0) {
+                if(this.objectLookingAt) this.objectLookingAt = undefined;
+            } else {
+                if(!this.objectLookingAt || (result[0] && result[0].object.uuid != this.objectLookingAt.object.uuid)) {
+                    this.objectLookingAt = result[0];
+                    //console.log(this.objectLookingAt);
+                }
+            }
+            
 
             // move forwards and backwards
             if (this.keys.w.isDown) {

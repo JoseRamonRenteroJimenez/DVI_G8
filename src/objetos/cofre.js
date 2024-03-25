@@ -10,13 +10,13 @@ class Cofre extends ExtendedObject3D {
         // Cargar caja
         escena.third.load.gltf(modeloURL).then(object => {
             // Agregar Cofre como hijo de la escena
-            this.add(object.scene);
+            this.add(object.scene.children[0]);
 
             // Configurar el objeto de Cofre
             this.name = nombre;
             this.scale.x = this.scale.y = this.scale.z = 1;
 
-            escena.third.physics.add.existing(this, { mass: 10 ,collisionFlags: 2});
+            escena.third.physics.add.existing(this, { shape: 'box', mass: 10 ,collisionFlags: 2});
 
             // Aquí puedes agregar lógica adicional, como la creación de física para las Cofres
             // Recuerda que necesitarás acceder a `escena.third.physics` y otras propiedades de `escena`
@@ -36,6 +36,9 @@ class Cofre extends ExtendedObject3D {
         if (this.body) {
             this.body.needUpdate = true;
         }
+    }
+    interact() {//funcion que se llama al pulsar E sobre el objeto
+        console.log("interacted with", this.name);
     }
 }
 

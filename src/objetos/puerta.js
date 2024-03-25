@@ -10,7 +10,7 @@ class Puerta extends ExtendedObject3D {
         // Cargar caja
         escena.third.load.gltf(modeloURL).then(object => {
             // Agregar carta como hijo de la escena
-            this.add(object.scene);
+            this.add(object.scene.children[0]);
 
             // Configurar el objeto de Puerta
             this.name = nombre;
@@ -36,6 +36,9 @@ class Puerta extends ExtendedObject3D {
         if (this.body) {
             this.body.needUpdate = true;
         }
+    }
+    interact() {//funcion que se llama al pulsar E sobre el objeto
+        console.log("interacted with", this.name);
     }
 }
 
