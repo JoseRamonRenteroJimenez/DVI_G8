@@ -31,11 +31,28 @@ class Caja extends ExtendedObject3D {
     // Método para actualizar la posición y la física de la Caja
     update(time) {
         // Mover las coordenadas del objeto actual
-        if(!this.startMove) return;
-        const amplitude = 2; // Reducir la amplitud para limitar el movimiento
-        const speed = 0.01; // Ajustar la velocidad para controlar la suavidad del movimiento
-
-        this.position.x = amplitude * Math.sin(speed * time);
+        if(this.name === 'Caja Bolas'){
+            if(!this.startMove){this.position.z = 0;}
+            else{this.position.z = 2;}
+        }else if (this.name === 'Caja 6'){
+            if(this.startMove){this.position.x = -4 ;}
+            else{this.position.x = 0 ;}
+        }else if (this.name === 'Caja 5'){
+            if(this.startMove){this.position.z = -2.5;this.position.x = -6.8 ;}
+            else{this.position.x = 0 ; this.position.z = 0;}
+        }else if (this.name === 'Caja 4'){
+            if(this.startMove){this.position.z = 2.3;this.position.x = -4.7 ;}
+            else{this.position.x = 0 ; this.position.z = 0;}
+        }else if (this.name === 'Caja 3'){
+            if(this.startMove){this.position.y = -2.7;this.position.z = 3 ; this.position.x = -9.7 ;}
+            else{this.position.x = 0 ; this.position.z = 0; this.position.y = 0;}
+        }else if (this.name === 'Caja 2'){
+            if(this.startMove){this.position.z = -4.2;this.position.x = -5 ;}
+            else{this.position.x = 0 ; this.position.z = 0;}
+        }else if (this.name === 'Caja 1'){
+            if(this.startMove){this.position.z = -4;this.position.x = -11.3 ;}
+            else{this.position.x = 0 ; this.position.z = 0;}
+        }
         // Si el objeto tiene un cuerpo físico, indicar que necesita actualización
         if (this.body) {
             this.body.needUpdate = true;
@@ -43,6 +60,8 @@ class Caja extends ExtendedObject3D {
     }
     interact() {//funcion que se llama al pulsar E sobre el objeto
         //start move al offset
+        if(!this.startMove){this.startMove = true;}
+        else{this.startMove = false;}
         console.log("interacted with", this.name);
     }
 }

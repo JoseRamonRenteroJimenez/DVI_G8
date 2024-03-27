@@ -103,6 +103,7 @@ class Nivel0 extends ExtendedObject3D {
             this.add(cajaBolas)
             arrayObjetos.push(cajaBolas)
 
+
             // Instanciación de las cajas del 1 al 7
             for (let i = 0; i < modelosCajas.length; i++) {
                 const nombreCaja = `Caja ${i + 1}`; // Nombre de la caja (Caja 1, Caja 2, ..., Caja 7)

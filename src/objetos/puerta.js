@@ -6,6 +6,7 @@ class Puerta extends ExtendedObject3D {
     constructor(escena, modeloURL, nombre) {
         super({ key: nombre })
         this.move = { x: 0, y: 0, z: 0 }
+        this.startMove = false;
 
         // Cargar caja
         escena.third.load.gltf(modeloURL).then(object => {
@@ -27,17 +28,21 @@ class Puerta extends ExtendedObject3D {
 
     // Método para actualizar la posición y la física de la puerta
     update(time) {
-        // Mover las coordenadas del objeto actual
-        const amplitude = 2; // Reducir la amplitud para limitar el movimiento
-        const speed = 0.01; // Ajustar la velocidad para controlar la suavidad del movimiento
-
-        this.position.x = amplitude * Math.sin(speed * time);
+        if(this.name === 'Puerta 1'){
+            if(!this.startMove){this.position.x = 0;}
+            else{this.position.x = -4.5;}
+        }else{
+            if(!this.startMove){this.position.x = 0;}
+            else{this.position.x = 4.5;}
+        }
         // Si el objeto tiene un cuerpo físico, indicar que necesita actualización
         if (this.body) {
             this.body.needUpdate = true;
         }
     }
     interact() {//funcion que se llama al pulsar E sobre el objeto
+        if(!this.startMove){this.startMove = true;}
+        else{this.startMove = false;}
         console.log("interacted with", this.name);
     }
 }
