@@ -45,15 +45,14 @@ import modeloCofre from "url:../../assets/glb/cofre_1.glb"
 import modeloLlave from "url:../../assets/glb/llave.glb"
 import modeloLlave_inv from "url:../../assets/glb/llave_inv.glb"
 
-// Nombres de los modelos para las cajas del 1 al 7
+// Nombres de los modelos para las cajas del 1 al 6
 const modelosCajas = [
     modeloCaja1,
     modeloCaja2,
     modeloCaja3,
     modeloCaja4,
     modeloCaja5,
-    modeloCaja6,
-    modeloCaja7
+    modeloCaja6
 ]
 
 const modelosCartas = [
@@ -104,9 +103,9 @@ class Nivel0 extends ExtendedObject3D {
             arrayObjetos.push(cajaBolas)
 
 
-            // Instanciación de las cajas del 1 al 7
+            // Instanciación de las cajas del 1 al 6
             for (let i = 0; i < modelosCajas.length; i++) {
-                const nombreCaja = `Caja ${i + 1}`; // Nombre de la caja (Caja 1, Caja 2, ..., Caja 7)
+                const nombreCaja = `Caja ${i + 1}`; // Nombre de la caja (Caja 1, Caja 2, ..., Caja 6)
                 const modeloCaja = modelosCajas[i]; // Ruta del modelo de la caja
                 const caja = new Caja(escena, modeloCaja, nombreCaja); // Instancia de la caja
                 this.add(caja); // Añadir la caja a la escena
